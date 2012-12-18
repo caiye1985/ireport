@@ -19,7 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
 import com.agileEAP.ireport.utils.Exceptions;
 
 /**
- * 支持HMAC-SHA1消息签名 �?DES/AES对称加密的工具类.
+ * 支持HMAC-SHA1消息签名 及 DES/AES对称加密的工具类.
  * 
  * 支持Hex与Base64两种编码方式.
  * 
@@ -39,7 +39,7 @@ public class Cryptos {
 
 	//-- HMAC-SHA1 funciton --//
 	/**
-	 * 使用HMAC-SHA1进行消息签名, 返回字节数组,长度�?0字节.
+	 * 使用HMAC-SHA1进行消息签名, 返回字节数组,长度为20字节.
 	 * 
 	 * @param input 原始输入字符数组
 	 * @param key HMAC-SHA1密钥
@@ -59,7 +59,7 @@ public class Cryptos {
 	 * 校验HMAC-SHA1签名是否正确.
 	 * 
 	 * @param expected 已存在的签名
-	 * @param input 原始输入字符�?
+	 * @param input 原始输入字符串
 	 * @param key 密钥
 	 */
 	public static boolean isMacValid(byte[] expected, byte[] input, byte[] key) {
@@ -68,8 +68,8 @@ public class Cryptos {
 	}
 
 	/**
-	 * 生成HMAC-SHA1密钥,返回字节数组,长度�?60�?20字节).
-	 * HMAC-SHA1算法对密钥无特殊要求, RFC2401建议�?��长度�?60�?20字节).
+	 * 生成HMAC-SHA1密钥,返回字节数组,长度为160位(20字节).
+	 * HMAC-SHA1算法对密钥无特殊要求, RFC2401建议最少长度为160位(20字节).
 	 */
 	public static byte[] generateHmacSha1Key() {
 		try {
@@ -84,20 +84,20 @@ public class Cryptos {
 
 	//-- AES funciton --//
 	/**
-	 * 使用AES加密原始字符�?
+	 * 使用AES加密原始字符串.
 	 * 
 	 * @param input 原始输入字符数组
-	 * @param key 符合AES要求的密�?
+	 * @param key 符合AES要求的密钥
 	 */
 	public static byte[] aesEncrypt(byte[] input, byte[] key) {
 		return aes(input, key, Cipher.ENCRYPT_MODE);
 	}
 
 	/**
-	 * 使用AES加密原始字符�?
+	 * 使用AES加密原始字符串.
 	 * 
 	 * @param input 原始输入字符数组
-	 * @param key 符合AES要求的密�?
+	 * @param key 符合AES要求的密钥
 	 * @param iv 初始向量
 	 */
 	public static byte[] aesEncrypt(byte[] input, byte[] key, byte[] iv) {
@@ -105,10 +105,10 @@ public class Cryptos {
 	}
 
 	/**
-	 * 使用AES解密字符�? 返回原始字符�?
+	 * 使用AES解密字符串, 返回原始字符串.
 	 * 
 	 * @param input Hex编码的加密字符串
-	 * @param key 符合AES要求的密�?
+	 * @param key 符合AES要求的密钥
 	 */
 	public static String aesDecrypt(byte[] input, byte[] key) {
 		byte[] decryptResult = aes(input, key, Cipher.DECRYPT_MODE);
@@ -116,10 +116,10 @@ public class Cryptos {
 	}
 
 	/**
-	 * 使用AES解密字符�? 返回原始字符�?
+	 * 使用AES解密字符串, 返回原始字符串.
 	 * 
 	 * @param input Hex编码的加密字符串
-	 * @param key 符合AES要求的密�?
+	 * @param key 符合AES要求的密钥
 	 * @param iv 初始向量
 	 */
 	public static String aesDecrypt(byte[] input, byte[] key, byte[] iv) {
@@ -128,11 +128,11 @@ public class Cryptos {
 	}
 
 	/**
-	 * 使用AES加密或解密无编码的原始字节数�? 返回无编码的字节数组结果.
+	 * 使用AES加密或解密无编码的原始字节数组, 返回无编码的字节数组结果.
 	 * 
 	 * @param input 原始字节数组
-	 * @param key 符合AES要求的密�?
-	 * @param mode Cipher.ENCRYPT_MODE �?Cipher.DECRYPT_MODE
+	 * @param key 符合AES要求的密钥
+	 * @param mode Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
 	 */
 	private static byte[] aes(byte[] input, byte[] key, int mode) {
 		try {
@@ -146,12 +146,12 @@ public class Cryptos {
 	}
 
 	/**
-	 * 使用AES加密或解密无编码的原始字节数�? 返回无编码的字节数组结果.
+	 * 使用AES加密或解密无编码的原始字节数组, 返回无编码的字节数组结果.
 	 * 
 	 * @param input 原始字节数组
-	 * @param key 符合AES要求的密�?
+	 * @param key 符合AES要求的密钥
 	 * @param iv 初始向量
-	 * @param mode Cipher.ENCRYPT_MODE �?Cipher.DECRYPT_MODE
+	 * @param mode Cipher.ENCRYPT_MODE 或 Cipher.DECRYPT_MODE
 	 */
 	private static byte[] aes(byte[] input, byte[] key, byte[] iv, int mode) {
 		try {
@@ -166,14 +166,14 @@ public class Cryptos {
 	}
 
 	/**
-	 * 生成AES密钥,返回字节数组, 默认长度�?28�?16字节).
+	 * 生成AES密钥,返回字节数组, 默认长度为128位(16字节).
 	 */
 	public static byte[] generateAesKey() {
 		return generateAesKey(DEFAULT_AES_KEYSIZE);
 	}
 
 	/**
-	 * 生成AES密钥,可�?长度�?28,192,256�?
+	 * 生成AES密钥,可选长度为128,192,256位.
 	 */
 	public static byte[] generateAesKey(int keysize) {
 		try {

@@ -19,12 +19,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
- * 反射工具�?
- * 
- * 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
- * 
- * @author calvin
- */
+* 反射工具类.
+* 
+* 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
+* 
+* @author calvin
+*/
 public class Reflections {
 	private static final String SETTER_PREFIX = "set";
 
@@ -43,7 +43,7 @@ public class Reflections {
 	}
 
 	/**
-	 * 调用Setter方法, 仅匹配方法名�?
+	 * 调用Setter方法, 仅匹配方法名。
 	 */
 	public static void invokeSetter(Object obj, String propertyName, Object value) {
 		String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(propertyName);
@@ -51,7 +51,7 @@ public class Reflections {
 	}
 
 	/**
-	 * 直接读取对象属�?�? 无视private/protected修饰�? 不经过getter函数.
+	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
 	 */
 	public static Object getFieldValue(final Object obj, final String fieldName) {
 		Field field = getAccessibleField(obj, fieldName);
@@ -70,7 +70,7 @@ public class Reflections {
 	}
 
 	/**
-	 * 直接设置对象属�?�? 无视private/protected修饰�? 不经过setter函数.
+	 * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
 	 */
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
 		Field field = getAccessibleField(obj, fieldName);
@@ -87,9 +87,9 @@ public class Reflections {
 	}
 
 	/**
-	 * 直接调用对象方法, 无视private/protected修饰�?
-	 * 用于�?��性调用的情况，否则应使用getAccessibleMethod()函数获得Method后反复调�?
-	 * 同时匹配方法�?参数类型�?
+	 * 直接调用对象方法, 无视private/protected修饰符.
+	 * 用于一次性调用的情况，否则应使用getAccessibleMethod()函数获得Method后反复调用.
+	 * 同时匹配方法名+参数类型，
 	 */
 	public static Object invokeMethod(final Object obj, final String methodName, final Class<?>[] parameterTypes,
 			final Object[] args) {
@@ -107,8 +107,8 @@ public class Reflections {
 
 	/**
 	 * 直接调用对象方法, 无视private/protected修饰符，
-	 * 用于�?��性调用的情况，否则应使用getAccessibleMethodByName()函数获得Method后反复调�?
-	 * 只匹配函数名，如果有多个同名函数调用第一个�?
+	 * 用于一次性调用的情况，否则应使用getAccessibleMethodByName()函数获得Method后反复调用.
+	 * 只匹配函数名，如果有多个同名函数调用第一个。
 	 */
 	public static Object invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
 		Method method = getAccessibleMethodByName(obj, methodName);
@@ -124,9 +124,9 @@ public class Reflections {
 	}
 
 	/**
-	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访�?
+	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访问.
 	 * 
-	 * 如向上转型到Object仍无法找�? 返回null.
+	 * 如向上转型到Object仍无法找到, 返回null.
 	 */
 	public static Field getAccessibleField(final Object obj, final String fieldName) {
 		Validate.notNull(obj, "object can't be null");
@@ -137,18 +137,18 @@ public class Reflections {
 				makeAccessible(field);
 				return field;
 			} catch (NoSuchFieldException e) {//NOSONAR
-				// Field不在当前类定�?继续向上转型
+				// Field不在当前类定义,继续向上转型
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访�?
-	 * 如向上转型到Object仍无法找�? 返回null.
-	 * 匹配函数�?参数类型�?
+	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
+	 * 如向上转型到Object仍无法找到, 返回null.
+	 * 匹配函数名+参数类型。
 	 * 
-	 * 用于方法�?��被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
+	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
 	 */
 	public static Method getAccessibleMethod(final Object obj, final String methodName,
 			final Class<?>... parameterTypes) {
@@ -161,18 +161,18 @@ public class Reflections {
 				makeAccessible(method);
 				return method;
 			} catch (NoSuchMethodException e) {
-				// Method不在当前类定�?继续向上转型
+				// Method不在当前类定义,继续向上转型
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访�?
-	 * 如向上转型到Object仍无法找�? 返回null.
-	 * 只匹配函数名�?
+	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
+	 * 如向上转型到Object仍无法找到, 返回null.
+	 * 只匹配函数名。
 	 * 
-	 * 用于方法�?��被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
+	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
 	 */
 	public static Method getAccessibleMethodByName(final Object obj, final String methodName) {
 		Validate.notNull(obj, "object can't be null");
@@ -191,7 +191,7 @@ public class Reflections {
 	}
 
 	/**
-	 * 改变private/protected的方法为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱�?�?
+	 * 改变private/protected的方法为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
 	 */
 	public static void makeAccessible(Method method) {
 		if ((!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))
@@ -201,7 +201,7 @@ public class Reflections {
 	}
 
 	/**
-	 * 改变private/protected的成员变量为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱�?�?
+	 * 改变private/protected的成员变量为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
 	 */
 	public static void makeAccessible(Field field) {
 		if ((!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers()) || Modifier
@@ -211,8 +211,8 @@ public class Reflections {
 	}
 
 	/**
-	 * 通过反射, 获得Class定义中声明的泛型参数的类�? 注意泛型必须定义在父类处
-	 * 如无法找�? 返回Object.class.
+	 * 通过反射, 获得Class定义中声明的泛型参数的类型, 注意泛型必须定义在父类处
+	 * 如无法找到, 返回Object.class.
 	 * eg.
 	 * public UserDao extends HibernateDao<User>
 	 *
@@ -225,7 +225,7 @@ public class Reflections {
 
 	/**
 	 * 通过反射, 获得Class定义中声明的父类的泛型参数的类型.
-	 * 如无法找�? 返回Object.class.
+	 * 如无法找到, 返回Object.class.
 	 * 
 	 * 如public UserDao extends HibernateDao<User,Long>
 	 *

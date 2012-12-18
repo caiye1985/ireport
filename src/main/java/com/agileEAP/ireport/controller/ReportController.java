@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.agileEAP.util.JsonConvert;
+//import com.agileEAP.util.JsonConvert;
 
 /**
  * @author trenhui
@@ -17,8 +17,8 @@ public class ReportController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String report() {
-		JsonConvert jsonConvert = new JsonConvert();
-		jsonConvert.Serial(null);
+		//JsonConvert jsonConvert = new JsonConvert();
+		//jsonConvert.Serial(null);
 		
 		return "report/display";
 	}
